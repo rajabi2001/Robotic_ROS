@@ -1,0 +1,12 @@
+<launch>
+
+
+    <node pkg="HW1_student_filter" type="student_request.py" name="student_request" output="screen"></node>
+
+    <node pkg="HW1_student_filter" type="splitter.py" name="splitter" output="screen"></node>
+
+    <node pkg="HW1_student_filter" type="software.py" name="software" output="screen"></node>
+
+    <node pkg="HW1_student_filter" type="hardware.py" name="hardware" output="screen"></node>
+
+</launch>
