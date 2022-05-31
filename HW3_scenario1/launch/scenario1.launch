@@ -1,19 +1,20 @@
 <launch>
 
 
-    <node pkg="HW3_scenario1" type="closest_obstacle.py" name="closest_obstacle" output="screen"></node>
+    <!-- <node pkg="HW3_scenario1" type="closest_obstacle.py" name="closest_obstacle" output="screen"></node> -->
 
-    <!-- <node pkg="HW3_scenario1" type="test.py" name="test_topic" output="screen"></node> -->
+    <node pkg="HW3_scenario1" type="get_distance.py" name="get_distance" output="screen"></node>
 
-    <!-- <node pkg="simple_controller" type="monitor.py" name="monitor"></node> -->
+    <node pkg="HW3_scenario1" type="closest_obstacle_byservice.py" name="closest_obstacle_byservice" output="screen"></node>
 
-    <!-- <include file="$(find turtlebot3_gazebo)/launch/custom_world.launch">
+
+    <include file="$(find turtlebot3_gazebo)/launch/custom_world.launch">
         <arg name="world_name_file" value="$(find turtlebot3_gazebo)/worlds/detect_obstacles.world"/>
         <arg name="x_pos" value="0.0"/>
         <arg name="y_pos" value="0.0"/>
         <arg name="z_pos" value="0.0"/>
         <arg name="yaw" value="1.57"/>
-    </include> -->
+    </include>
 
     <!-- <node name="rviz" pkg="rviz" type="rviz"/> -->
 
