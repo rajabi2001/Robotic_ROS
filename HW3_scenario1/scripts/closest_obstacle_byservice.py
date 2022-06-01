@@ -68,7 +68,7 @@ class Detector:
         while not rospy.is_shutdown():
 
             closeset_obsetacle , min_distance = self.find_closest_obstacle()
-            print(f"obstacle:{closeset_obsetacle} and distance:{min_distance}")
+            # print(f"obstacle:{closeset_obsetacle} and distance:{min_distance}")
             myobstacle = Obstacle()
             myobstacle.distance = min_distance
             myobstacle.obstacle_name = closeset_obsetacle

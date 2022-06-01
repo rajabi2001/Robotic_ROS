@@ -1,11 +1,10 @@
 <launch>
 
 
-    <!-- <node pkg="HW3_scenario1" type="closest_obstacle.py" name="closest_obstacle" output="screen"></node> -->
-
-    <node pkg="HW3_scenario1" type="get_distance.py" name="get_distance" output="screen"></node>
-
-    <node pkg="HW3_scenario1" type="closest_obstacle_byservice.py" name="closest_obstacle_byservice" output="screen"></node>
+    <node pkg="HW3_scenario1" type="closest_obstacle.py" name="closest_obstacle" output="screen"></node>
+    <!-- <node pkg="HW3_scenario1" type="get_distance.py" name="get_distance" output="screen"></node> -->
+    <node pkg="HW3_scenario1" type="LiDAR.py" name="LiDAR_sensor" output="screen"></node>
+    <!-- <node pkg="HW3_scenario1" type="closest_obstacle_byservice.py" name="closest_obstacle_byservice" output="screen"></node> -->
 
 
     <include file="$(find turtlebot3_gazebo)/launch/custom_world.launch">
