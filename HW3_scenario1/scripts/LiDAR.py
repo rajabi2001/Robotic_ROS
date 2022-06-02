@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 
 
+from pickle import TRUE
+from time import sleep
 from traceback import print_tb
 import rospy
 import tf
@@ -20,13 +22,15 @@ class Sensor:
         rospy.init_node("LiDAR_sensor" , anonymous=False)
 
         self.obstacle_subscriber = rospy.Subscriber("/ClosestObstacle" , Obstacle , callback=self.obstacle_callback)
-        # self.laser_subscriber = rospy.Subscriber("/scan" , LaserScan , callback=self.laser_callback)
+        self.laser_subscriber = rospy.Subscriber("/scan" , LaserScan , callback=self.laser_callback)
         self.cmd_publisher = rospy.Publisher("/cmd_vel" , Twist , queue_size=10)
         self.teleopcmd_subscriber = rospy.Subscriber("/cmd_teleop" , Twist , callback=self.teleop_callback)
 
         self.closest_distance = 999
         self.closest_obstacle = "nothing"
+        self.closest_angle = 0
         self.stop_teleop = False
+        self.angular_speed = 0.3
 
 
     def teleop_callback(self ,msg):
@@ -41,9 +45,10 @@ class Sensor:
         self.closest_obstacle = msg.obstacle_name
         
 
-    # def laser_callback(self ,msg):
+    def laser_callback(self ,msg):
 
-    #     pass
+        self.closest_angle = self.find_min_angle(msg)
+
     def find_min_angle(self , laser_msg):
 
         min_distance = 999
@@ -57,6 +62,23 @@ class Sensor:
         
         return myangle
             
+    def turn(self):
+
+        first_angle= self.closest_angle
+        goal_angle = (150 + first_angle) % 360
+        # print(first_angle)
+        # print(goal_angle)
+
+        twist = Twist()
+        twist.angular.z = self.angular_speed
+        self.cmd_publisher.publish(twist)
+
+        while True :
+
+            if (goal_angle - 5) <= self.closest_angle <= (goal_angle + 5):
+                break
+
+
 
     def run(self):
 
@@ -69,10 +91,11 @@ class Sensor:
                 self.stop_teleop = True
                 self.cmd_publisher.publish(Twist())
 
-                laser_msg = rospy.wait_for_message("/scan" , LaserScan)
-                myangle = self.find_min_angle(laser_msg)
-
-                print(myangle)
+                self.turn()
+                self.cmd_publisher.publish(Twist())
+                self.stop_teleop = False
+                sleep(2)
+                # print(myangle)
             
 
 
