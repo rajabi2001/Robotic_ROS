@@ -8,6 +8,7 @@ from nav_msgs.msg import Odometry
 from sensor_msgs.msg import LaserScan
 from geometry_msgs.msg import Twist
 from HW3_scenario1.msg import Obstacle
+
 from math import radians
 import numpy as np
 
@@ -21,12 +22,17 @@ class Sensor:
         self.obstacle_subscriber = rospy.Subscriber("/ClosestObstacle" , Obstacle , callback=self.obstacle_callback)
         # self.laser_subscriber = rospy.Subscriber("/scan" , LaserScan , callback=self.laser_callback)
         self.cmd_publisher = rospy.Publisher("/cmd_vel" , Twist , queue_size=10)
-
+        self.teleopcmd_subscriber = rospy.Subscriber("/cmd_teleop" , Twist , callback=self.teleop_callback)
 
         self.closest_distance = 999
         self.closest_obstacle = "nothing"
+        self.stop_teleop = False
 
 
+    def teleop_callback(self ,msg):
+
+        if self.stop_teleop == False:
+            self.cmd_publisher.publish(msg)
 
 
     def obstacle_callback(self ,msg):
@@ -59,12 +65,15 @@ class Sensor:
             if self.closest_distance < 1.5:
 
                 # print(f"obstacle:{self.closest_obstacle} and distance:{self.closest_distance}")
+
+                self.stop_teleop = True
                 self.cmd_publisher.publish(Twist())
 
                 laser_msg = rospy.wait_for_message("/scan" , LaserScan)
                 myangle = self.find_min_angle(laser_msg)
 
                 print(myangle)
+            
 
 
 
