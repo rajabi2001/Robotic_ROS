@@ -1,5 +1,6 @@
 #!/usr/bin/python3
 
+from time import sleep
 import rospy
 from sensor_msgs.msg import LaserScan
 from geometry_msgs.msg import Twist
@@ -18,10 +19,11 @@ class Follower:
         self.dt = 0.005
         self.epsilon = 2
 
-        # gains for angular PID controller
-        self.kp_a = 0.6
+        # gains for PID controller
+        self.kp_a = 2
         self.ki_a = 0
-        self.kd_a = 7
+        self.kd_a = 25
+        self.kp_l = 0.0005
 
     def find_wall(self):
 
@@ -49,7 +51,7 @@ class Follower:
 
             wall_angle ,wall_distance = self.find_wall()
 
-            if (goal_angle - 5) <= wall_angle <= (goal_angle + 5):
+            if (goal_angle - 3) <= wall_angle <= (goal_angle + 3):
 
                 self.cmd_publisher.publish(Twist())
                 break
@@ -65,13 +67,18 @@ class Follower:
 
             wall_angle ,wall_distance = self.find_wall()
 
-            if wall_distance <= self.default_distance:
+            if wall_distance <= (self.default_distance + 0.05):
 
                 print(f"angle:{wall_angle} and distance:{wall_distance}")
                 self.cmd_publisher.publish(Twist())
                 break
         
         self.turn_left()
+        
+        twist = Twist()
+        twist.linear.x = 0.5
+        self.cmd_publisher.publish(Twist())
+        sleep(1)
         
 
             
@@ -85,20 +92,21 @@ class Follower:
         while not rospy.is_shutdown():
 
             wall_angle ,wall_distance = self.find_wall()
-            # angle_error = (270 - wall_angle) % 180
+            angle_error = (270 - wall_angle) % 180
             distance_error = self.default_distance - wall_distance 
-            angle_error = distance_error
 
-            sum_angular_error += (angle_error * self.dt)
+            sum_angular_error += (distance_error * self.dt)
 
-            P = self.kp_a * angle_error
+            # P = self.kp_a * distance_error + abs(self.kp_l * angle_error)
+            P = self.kp_a * distance_error
             I = self.ki_a * sum_angular_error
-            D = self.kd_a * (angle_error - prev_angular_error) 
+            D = self.kd_a * (distance_error - prev_angular_error) 
+
             twist.angular.z =  P + I + D
-
-            prev_angular_error = angle_error
-
+            # twist.linear.x = self.linear_speed - abs(self.kp_l * angle_error)
             twist.linear.x = self.linear_speed
+
+            prev_angular_error = distance_error
             self.cmd_publisher.publish(twist)
             rospy.sleep(self.dt)
 
