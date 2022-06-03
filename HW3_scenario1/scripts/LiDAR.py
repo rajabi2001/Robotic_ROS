@@ -1,11 +1,8 @@
 #!/usr/bin/env python3
 
 
-from pickle import TRUE
 from time import sleep
-from traceback import print_tb
 import rospy
-import tf
 from nav_msgs.msg import Odometry
 from sensor_msgs.msg import LaserScan
 from geometry_msgs.msg import Twist

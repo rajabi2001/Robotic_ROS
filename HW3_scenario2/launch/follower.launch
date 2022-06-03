@@ -1,0 +1,19 @@
+<launch>
+
+
+    <node pkg="HW3_scenario2" type="wall_follower.py" name="wall_follower" output="screen"></node>
+    
+
+
+    <include file="$(find turtlebot3_gazebo)/launch/custom_world.launch">
+        <arg name="world_name_file" value="$(find turtlebot3_gazebo)/worlds/square.world"/>
+        <arg name="x_pos" value="0.0"/>
+        <arg name="y_pos" value="0.0"/>
+        <arg name="z_pos" value="0.0"/>
+        <arg name="yaw" value="1.57"/>
+    </include>
+
+    <!-- <node name="rviz" pkg="rviz" type="rviz"/> -->
+
+
+</launch>
