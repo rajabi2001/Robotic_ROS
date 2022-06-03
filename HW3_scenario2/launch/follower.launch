@@ -11,9 +11,10 @@
         <arg name="y_pos" value="0.0"/>
         <arg name="z_pos" value="0.0"/>
         <arg name="yaw" value="1.57"/>
-    </include>
+    </include> 
 
-    <!-- <node name="rviz" pkg="rviz" type="rviz"/> -->
+    <node pkg="simple_controller" type="monitor.py" name="monitor"></node>
+    <node name="rviz" pkg="rviz" type="rviz"/>
 
 
 </launch>
