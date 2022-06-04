@@ -7,14 +7,14 @@
 
     <include file="$(find turtlebot3_gazebo)/launch/custom_world.launch">
         <arg name="world_name_file" value="$(find turtlebot3_gazebo)/worlds/path_to_goal.world"/>
-        <arg name="x_pos" value="-0.5"/>
+        <arg name="x_pos" value="0"/>
         <arg name="y_pos" value="0.0"/>
         <arg name="z_pos" value="0.0"/>
         <arg name="yaw" value="0.0"/>
     </include> 
 
-    <node pkg="simple_controller" type="monitor.py" name="monitor"></node>
-    <node name="rviz" pkg="rviz" type="rviz"/>
+    <!-- <node pkg="simple_controller" type="monitor.py" name="monitor"></node>
+    <node name="rviz" pkg="rviz" type="rviz"/> -->
 
 
 </launch>
