@@ -1,5 +1,6 @@
 #!/usr/bin/python3
 
+from tabnanny import check
 from time import sleep
 import rospy
 from sensor_msgs.msg import LaserScan
@@ -13,17 +14,16 @@ class Follower:
 
         self.cmd_publisher = rospy.Publisher("/cmd_vel" , Twist , queue_size=10)
 
-        self.default_distance = 0.5
-        self.linear_speed = 0.2
+        self.default_distance = 0.375
+        self.linear_speed = 0.15
         self.angular_speed = 0.2
         self.dt = 0.005
         self.epsilon = 2
 
         # gains for PID controller
-        self.kp_a = 2
+        self.kp_a = 3
         self.ki_a = 0
-        self.kd_a = 25
-        self.kp_l = 0.0005
+        self.kd_a = 35
 
     def find_wall(self):
 
@@ -32,13 +32,15 @@ class Follower:
 
         laser_msg = rospy.wait_for_message("/scan" , LaserScan)
 
-        for i in range(360):
+        iterate_list = list(range(0,6)) + list(range(180,360))
+        for i in iterate_list:
 
             if laser_msg.ranges[i] < min_distance:
                 myangle = i
                 min_distance = laser_msg.ranges[i]
         
         return myangle , min_distance
+
 
     def turn_left(self):
 
@@ -91,10 +93,22 @@ class Follower:
 
         while not rospy.is_shutdown():
 
-            wall_angle ,wall_distance = self.find_wall()
-            angle_error = (270 - wall_angle) % 180
-            distance_error = self.default_distance - wall_distance 
+            checklist = list(range(0,5)) + list(range(355,360))
 
+            wall_angle ,wall_distance = self.find_wall()
+            # print(f"{wall_angle} , {wall_distance}")
+            if wall_angle in checklist:
+                
+                self.turn_left()
+                twist = Twist()
+                twist.linear.x = 0.1
+                self.cmd_publisher.publish(Twist())
+                sleep(1)
+                continue
+
+            distance_error = self.default_distance - wall_distance
+
+            distance_error = self.default_distance - wall_distance
             sum_angular_error += (distance_error * self.dt)
 
             # P = self.kp_a * distance_error + abs(self.kp_l * angle_error)
@@ -119,8 +133,8 @@ if __name__ == "__main__":
     
     follower = Follower()
 
-    # follower.reach_wall_first_time()
-    # follower.wall_following()
+    follower.reach_wall_first_time()
+    follower.wall_following()
     
     
     
