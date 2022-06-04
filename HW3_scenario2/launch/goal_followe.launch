@@ -13,8 +13,8 @@
         <arg name="yaw" value="0.0"/>
     </include> 
 
-    <!-- <node pkg="simple_controller" type="monitor.py" name="monitor"></node>
-    <node name="rviz" pkg="rviz" type="rviz"/> -->
+    <node pkg="simple_controller" type="monitor.py" name="monitor"></node>
+    <node name="rviz" pkg="rviz" type="rviz"/>
 
 
 </launch>
