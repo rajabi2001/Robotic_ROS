@@ -162,7 +162,6 @@ class Follower:
             robot_orientation = self.get_heading()
             print(robot_orientation)
             if -1.65 < robot_orientation < -1.48:
-                print("fuuuuuuuuuuuck")
                 twist = Twist()
                 twist.linear.x = self.linear_speed 
                 self.cmd_publisher.publish(twist)

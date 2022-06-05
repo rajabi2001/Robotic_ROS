@@ -92,7 +92,7 @@ class Follower:
         while not rospy.is_shutdown():
 
             wall_angle ,wall_distance = self.find_wall()
-            angle_error = (270 - wall_angle) % 180
+            # angle_error = (270 - wall_angle) % 180
             distance_error = self.default_distance - wall_distance 
 
             sum_angular_error += (distance_error * self.dt)

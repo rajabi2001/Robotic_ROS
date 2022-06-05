@@ -15,7 +15,8 @@
         <arg name="yaw" value="1.57"/>
     </include>
 
-    <!-- <node name="rviz" pkg="rviz" type="rviz"/> -->
+    <node pkg="simple_controller" type="monitor.py" name="monitor"></node>
+    <node name="rviz" pkg="rviz" type="rviz"/>
 
     <node pkg="HW3_scenario1" type="teleop_key.py" name="custom_teleop_key"  output="screen"></node>
 
