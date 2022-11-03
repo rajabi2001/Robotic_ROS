@@ -1,4 +1,3 @@
 # Robotic_ROS
-these are my homeworks and projects of the rebotic course
-based on ROS
+These are my homework and projects for the robotic course based on ROS
 
