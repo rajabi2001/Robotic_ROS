@@ -1,0 +1,5 @@
+<launch>
+
+  <node pkg="FinalProject_slam" type="wall_follow.py" name="wall_follow" output="screen"></node>
+
+</launch>
